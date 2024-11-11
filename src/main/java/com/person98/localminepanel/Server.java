@@ -3,6 +3,13 @@ package com.person98.localminepanel;
 import java.io.Serializable;
 import java.util.UUID;
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Properties;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Files;
 
 import com.person98.localminepanel.templates.ServerTemplate;
 import lombok.Getter;
@@ -77,5 +84,28 @@ public class Server implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void saveServerProperties(Map<String, String> properties) throws IOException {
+        Path propsPath = Path.of(getServerPath(), "server.properties");
+        Properties props = new Properties();
+        props.putAll(properties);
+        
+        try (OutputStream out = Files.newOutputStream(propsPath)) {
+            props.store(out, "Minecraft server properties");
+        }
+    }
+
+    public Map<String, String> loadServerProperties() throws IOException {
+        Path propsPath = Path.of(getServerPath(), "server.properties");
+        Properties props = new Properties();
+        
+        if (Files.exists(propsPath)) {
+            try (InputStream in = Files.newInputStream(propsPath)) {
+                props.load(in);
+            }
+        }
+        
+        return new HashMap<>((Map) props);
     }
 } 

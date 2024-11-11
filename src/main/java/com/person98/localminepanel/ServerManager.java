@@ -59,7 +59,7 @@ public class ServerManager {
         }
     }
 
-    private void saveServers() {
+    void saveServers() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(savePath.toFile()))) {
             oos.writeObject(new ArrayList<>(servers));
         } catch (IOException e) {
