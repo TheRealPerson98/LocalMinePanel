@@ -36,17 +36,11 @@ public class ServerInstaller {
         }
     }
 
-    public static void installServer(Server server) throws Exception {
+    public static void installServer(Server server, ServerTemplate template) throws Exception {
         LOGGER.info("Starting server installation for " + server.getName());
         LOGGER.info("Server type: " + server.getType() + ", Software: " + server.getSoftware());
         
-        ServerTemplate template = TemplateManager.getInstance()
-            .getTemplate(server.getType().toLowerCase(), server.getSoftware().toLowerCase());
-        
-        if (template == null) {
-            LOGGER.severe("Template not found for " + server.getSoftware());
-            throw new RuntimeException("Template not found for " + server.getSoftware());
-        }
+        server.setTemplate(template);
         
         LOGGER.info("Template loaded successfully: " + template.getName());
         LOGGER.info("Version URL: " + template.getVersionUrl());

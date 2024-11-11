@@ -1,5 +1,6 @@
 package com.person98.localminepanel;
 
+import com.person98.localminepanel.templates.ServerTemplate;
 import com.person98.localminepanel.templates.TemplateManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -57,7 +58,17 @@ public class AddServerDialogController {
             Server newServer = new Server(serverName, serverType.toLowerCase(), serverSoftware.toLowerCase());
             
             try {
-                ServerInstaller.installServer(newServer);
+                // Get the template for the selected server type and software
+                ServerTemplate template = TemplateManager.getInstance()
+                    .getTemplate(serverType.toLowerCase(), serverSoftware.toLowerCase());
+                    
+                if (template == null) {
+                    showError("Template Error", "Could not find template for selected server type", 
+                        new Exception("No template found for " + serverType + "/" + serverSoftware));
+                    return;
+                }
+                
+                ServerInstaller.installServer(newServer, template);
                 ServerManager.getInstance().addServer(newServer);
                 handleCancel();
             } catch (Exception e) {
