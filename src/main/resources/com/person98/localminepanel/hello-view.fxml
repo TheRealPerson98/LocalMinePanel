@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.person98.localminepanel.HelloController">
+    <!-- Sidebar -->
+    <VBox styleClass="sidebar" prefWidth="200">
+        <Label text="Servers" styleClass="sidebar-header"/>
+        <ListView fx:id="serverListView" VBox.vgrow="ALWAYS"/>
+        <Button text="Add Server" onAction="#showAddServerDialog" maxWidth="Infinity"/>
+    </VBox>
+    
+    <!-- Main Content Area -->
+    <VBox HBox.hgrow="ALWAYS">
+        <Label text="Select a server from the sidebar" 
+               alignment="CENTER"
+               style="-fx-font-size: 18px;"
+               VBox.vgrow="ALWAYS"
+               maxWidth="Infinity"
+               maxHeight="Infinity"/>
+    </VBox>
+</HBox>
