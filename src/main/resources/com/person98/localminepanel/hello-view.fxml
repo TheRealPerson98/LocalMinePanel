@@ -2,22 +2,60 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.person98.localminepanel.HelloController">
-    <!-- Sidebar -->
-    <VBox styleClass="sidebar" prefWidth="200">
-        <Label text="Servers" styleClass="sidebar-header"/>
-        <ListView fx:id="serverListView" VBox.vgrow="ALWAYS"/>
-        <Button text="Add Server" onAction="#showAddServerDialog" maxWidth="Infinity"/>
-    </VBox>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.person98.localminepanel.HelloController">
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Add Server" onAction="#showAddServerDialog"/>
+            <SeparatorMenuItem/>
+            <MenuItem text="Exit"/>
+        </Menu>
+    </MenuBar>
     
-    <!-- Main Content Area -->
-    <VBox HBox.hgrow="ALWAYS">
-        <Label text="Select a server from the sidebar" 
-               alignment="CENTER"
-               style="-fx-font-size: 18px;"
-               VBox.vgrow="ALWAYS"
-               maxWidth="Infinity"
-               maxHeight="Infinity"/>
-    </VBox>
-</HBox>
+    <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS">
+        <!-- Server List -->
+        <VBox styleClass="sidebar">
+            <Label text="Servers" styleClass="sidebar-header"/>
+            <ListView fx:id="serverListView" VBox.vgrow="ALWAYS"/>
+            <Button text="Add Server" onAction="#showAddServerDialog" maxWidth="Infinity"/>
+        </VBox>
+        
+        <!-- Server Details -->
+        <VBox fx:id="serverDetailsPane" styleClass="main-content" spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Server Details" styleClass="section-header"/>
+            
+            <!-- Server Controls -->
+            <HBox spacing="10">
+                <Button text="Start" onAction="#handleStartServer"/>
+                <Button text="Stop" onAction="#handleStopServer"/>
+                <Button text="Restart" onAction="#handleRestartServer"/>
+            </HBox>
+            
+            <!-- Server Stats -->
+            <GridPane vgap="5" hgap="10">
+                <Label text="Address:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="addressLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                
+                <Label text="Uptime:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="uptimeLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                
+                <Label text="CPU Usage:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="cpuLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                
+                <Label text="Memory:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="memoryLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
+            
+            <!-- Console -->
+            <VBox VBox.vgrow="ALWAYS" styleClass="console-area">
+                <TextArea fx:id="consoleOutput" VBox.vgrow="ALWAYS" styleClass="console"/>
+                <TextField fx:id="commandInput" onAction="#handleSendCommand" promptText="Enter command..."/>
+            </VBox>
+        </VBox>
+    </SplitPane>
+</VBox>

@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'com.person98.localminepanel'
-    mainClass = 'com.person98.localminepanel.HelloApplication'
+    mainClass = 'com.person98.localminepanel.MinePanelLocal'
 }
 
 javafx {
@@ -42,9 +42,16 @@ dependencies {
     implementation('eu.hansolo:tilesfx:11.48') {
         exclude(group: 'org.openjfx')
     }
+    implementation 'de.jensd:fontawesomefx-fontawesome:4.7.0-9.1.2'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
 }
 
 test {

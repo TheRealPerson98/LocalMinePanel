@@ -13,4 +13,59 @@
 .list-view {
     -fx-background-insets: 0;
     -fx-padding: 0;
-} 
+}
+
+.main-content {
+    -fx-background-color: white;
+}
+
+.section-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
+}
+
+.console-area {
+    -fx-padding: 20 0 0 0;
+}
+
+.console-area .text-area {
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: #ffffff;
+}
+
+.delete-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+    -fx-cursor: hand;
+}
+
+.delete-button:hover {
+    -fx-background-color: #ffeeee;
+}
+
+.console {
+    -fx-font-family: "Consolas", "Monaco", monospace;
+    -fx-background-color: #1E1E1E;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+}
+
+.console .content {
+    -fx-background-color: #1E1E1E;
+}
+
+.server-list {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #ddd;
+    -fx-border-width: 0 1 0 0;
+}
+
+.server-list .list-cell:selected {
+    -fx-background-color: #0078d4;
+    -fx-text-fill: white;
+}
+
+.server-list .list-cell {
+    -fx-padding: 8;
+}

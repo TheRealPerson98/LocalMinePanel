@@ -1,0 +1,36 @@
+{
+    "name": "Paper",
+    "author": "PaperMC",
+    "description": "High performance Minecraft server with plugin support",
+    "version_url": "https://api.papermc.io/v2/projects/paper",
+    "download": {
+        "type": "paper_api",
+        "base_url": "https://api.papermc.io/v2/projects/paper/versions/{version}/builds/{build}/downloads/paper-{version}-{build}.jar",
+        "version_path": "versions",
+        "latest_version_path": "versions[-1]",
+        "build_url": "versions/{version}",
+        "build_path": "builds",
+        "latest_build_path": "builds[-1]"
+    },
+    "config": {
+        "server.properties": {
+            "server-port": "25565",
+            "server-ip": "0.0.0.0",
+            "max-players": "20",
+            "online-mode": "true"
+        }
+    },
+    "startup": {
+        "command": "java -Xms128M -Xmx{memory}M {java_args} -jar {server_jar} --nogui",
+        "done_regex": "Done \\([0-9.]+s\\)! For help, type",
+        "variables": {
+            "memory": "1024",
+            "java_args": "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200",
+            "server_jar": "server.jar"
+        }
+    },
+    "stop": {
+        "command": "stop",
+        "timeout": 30
+    }
+} 

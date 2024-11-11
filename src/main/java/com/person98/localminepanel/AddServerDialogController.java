@@ -1,20 +1,17 @@
 package com.person98.localminepanel;
 
+import com.person98.localminepanel.templates.TemplateManager;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.stage.Stage;
-
-import java.util.Map;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddServerDialogController {
     @FXML private ComboBox<String> serverTypeComboBox;
     @FXML private ComboBox<String> serverSoftwareComboBox;
     @FXML private TextField serverNameField;
-    
-    private final Map<String, String[]> serverOptions = new HashMap<>();
     
     @FXML
     public void initialize() {
@@ -24,56 +21,62 @@ public class AddServerDialogController {
     }
     
     private void setupServerOptions() {
-        serverOptions.put("Bedrock", new String[]{
-            "LiteLoader-bedrock",
-            "PowerNukkitX",
-            "bedrock",
-            "gomint",
-            "nukkit",
-            "pocketmine_mp"
-        });
-        
-        serverOptions.put("Java", new String[]{
-            "cuberite", "curseforge", "fabric", "feather", "folia",
-            "forge/forge", "ftb", "glowstone", "krypton", "limbo",
-            "magma", "modrinth", "mohist", "nanolimbo", "neoforge",
-            "paper", "purpur", "quilt", "spigot", "spongeforge",
-            "spongevanilla", "technic", "vanillacord"
-        });
-        
-        serverOptions.put("Proxy", new String[]{
-            "Java/Travertine",
-            "Java/Velocity",
-            "Java/VIAaaS",
-            "Java/Waterfall",
-            "Bedrock/Waterdog PE",
-            "Cross Platform/GeyserMC",
-            "Cross Platform/Waterdog"
-        });
+        // Get categories from TemplateManager
+        List<String> categories = new ArrayList<>(TemplateManager.getInstance().getCategories());
+        serverTypeComboBox.setItems(FXCollections.observableArrayList(categories));
     }
     
     private void setupListeners() {
         serverTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                serverSoftwareComboBox.setItems(
-                    FXCollections.observableArrayList(serverOptions.get(newVal))
+                // Get templates for selected category
+                List<String> templates = new ArrayList<>(
+                    TemplateManager.getInstance()
+                        .getTemplatesForCategory(newVal.toLowerCase())
+                        .keySet()
                 );
+                serverSoftwareComboBox.setItems(FXCollections.observableArrayList(templates));
             }
         });
     }
     
     @FXML
     private void handleCancel() {
-        closeDialog();
+        ((Stage) serverTypeComboBox.getScene().getWindow()).close();
     }
     
     @FXML
     private void handleCreate() {
-        // TODO: Implement server creation logic
-        closeDialog();
+        String serverType = serverTypeComboBox.getValue();
+        String serverSoftware = serverSoftwareComboBox.getValue();
+        String serverName = serverNameField.getText();
+        
+        if (serverName != null && !serverName.trim().isEmpty() &&
+            serverType != null && serverSoftware != null) {
+            
+            Server newServer = new Server(serverName, serverType.toLowerCase(), serverSoftware.toLowerCase());
+            
+            try {
+                ServerInstaller.installServer(newServer);
+                ServerManager.getInstance().addServer(newServer);
+                handleCancel();
+            } catch (Exception e) {
+                showError("Installation Error", "Failed to install server", e);
+            }
+        }
     }
     
-    private void closeDialog() {
-        ((Stage) serverTypeComboBox.getScene().getWindow()).close();
+    private void showError(String title, String header, Exception e) {
+        Dialog<String> errorDialog = new Dialog<>();
+        errorDialog.setTitle(title);
+        errorDialog.setHeaderText(header);
+        
+        TextArea textArea = new TextArea(e.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        
+        errorDialog.getDialogPane().setContent(textArea);
+        errorDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        errorDialog.showAndWait();
     }
 } 
