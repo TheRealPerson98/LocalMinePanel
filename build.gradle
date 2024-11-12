@@ -100,6 +100,8 @@ shadowJar {
         )
     }
 
+    archiveFileName = 'LocalMinePanel.jar'
+
     mergeServiceFiles()
     configurations = [project.configurations.runtimeClasspath]
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
