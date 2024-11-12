@@ -1,5 +1,7 @@
-package com.person98.localminepanel;
+package com.person98.localminepanel.application.views;
 
+import com.person98.localminepanel.core.Server;
+import com.person98.localminepanel.core.ServerManager;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -17,6 +19,7 @@ public class ServerListCell extends ListCell<Server> {
 
     public ServerListCell() {
         text = new Text();
+        text.setStyle("-fx-fill: white;");
         deleteButton = new Button();
         
         // Create trash can icon

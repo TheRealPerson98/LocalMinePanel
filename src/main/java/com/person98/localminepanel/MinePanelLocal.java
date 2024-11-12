@@ -10,7 +10,7 @@ public class MinePanelLocal extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
         Scene scene = new Scene(loader.load(), 1024, 768);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("styles/theme.css").toExternalForm());
         
         stage.setTitle("Mine Panel Local");
         stage.setScene(scene);

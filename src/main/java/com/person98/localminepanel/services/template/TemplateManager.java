@@ -1,10 +1,8 @@
-package com.person98.localminepanel.templates;
+package com.person98.localminepanel.services.template;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.DirectoryStream;
@@ -13,10 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.FileSystem;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.util.logging.Logger;

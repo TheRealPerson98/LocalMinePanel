@@ -6,43 +6,46 @@
 <?import javafx.collections.*?>
 <?import java.lang.String?>
 
-<ScrollPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.person98.localminepanel.AddServerDialogController">
-    <VBox spacing="10">
+<ScrollPane xmlns:fx="http://javafx.com/fxml" 
+           fx:controller="com.person98.localminepanel.application.controllers.AddServerDialogController"
+           styleClass="scroll-pane"
+           stylesheets="@styles/theme.css">
+    <VBox spacing="10" styleClass="container">
         <padding>
             <Insets top="20" right="20" bottom="20" left="20"/>
         </padding>
         
-        <Label text="Add New Server" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <Label text="Add New Server" styleClass="header-label"/>
         
         <!-- Basic Settings -->
         <VBox spacing="5">
-            <Label text="Server Type"/>
-            <ComboBox fx:id="serverTypeComboBox" maxWidth="Infinity"/>
+            <Label text="Server Type" styleClass="field-label"/>
+            <ComboBox fx:id="serverTypeComboBox" maxWidth="Infinity" styleClass="combo-box"/>
         </VBox>
         
         <VBox spacing="5">
-            <Label text="Server Software"/>
-            <ComboBox fx:id="serverSoftwareComboBox" maxWidth="Infinity"/>
+            <Label text="Server Software" styleClass="field-label"/>
+            <ComboBox fx:id="serverSoftwareComboBox" maxWidth="Infinity" styleClass="combo-box"/>
         </VBox>
         
         <VBox spacing="5">
-            <Label text="Server Name"/>
-            <TextField fx:id="serverNameField" promptText="Enter server name"/>
+            <Label text="Server Name" styleClass="field-label"/>
+            <TextField fx:id="serverNameField" promptText="Enter server name" styleClass="text-field"/>
         </VBox>
 
         <!-- Server Configuration -->
-        <TitledPane text="Server Configuration" expanded="false">
-            <VBox fx:id="serverConfigVBox" spacing="10"/>
+        <TitledPane text="Server Configuration" expanded="false" styleClass="titled-pane">
+            <VBox fx:id="serverConfigVBox" spacing="10" styleClass="container"/>
         </TitledPane>
 
         <!-- Startup Configuration -->
-        <TitledPane text="Startup Configuration" expanded="false">
-            <VBox fx:id="startupConfigVBox" spacing="10"/>
+        <TitledPane text="Startup Configuration" expanded="false" styleClass="titled-pane">
+            <VBox fx:id="startupConfigVBox" spacing="10" styleClass="container"/>
         </TitledPane>
         
         <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Button text="Cancel" onAction="#handleCancel"/>
-            <Button text="Create" onAction="#handleCreate" defaultButton="true"/>
+            <Button text="Cancel" onAction="#handleCancel" styleClass="button, cancel-button"/>
+            <Button text="Create" onAction="#handleCreate" defaultButton="true" styleClass="button, create-button"/>
         </HBox>
     </VBox>
 </ScrollPane> 

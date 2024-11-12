@@ -1,8 +1,10 @@
-package com.person98.localminepanel.templates;
+package com.person98.localminepanel.services.template;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
+
+import com.person98.localminepanel.services.template.models.DownloadConfig;
 import lombok.Getter;
 import lombok.Setter;
 

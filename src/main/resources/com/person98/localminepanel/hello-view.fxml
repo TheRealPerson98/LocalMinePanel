@@ -5,104 +5,127 @@
 <?import javafx.geometry.Insets?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.person98.localminepanel.HelloController">
-    <MenuBar>
-        <Menu text="File">
-            <MenuItem text="Add Server" onAction="#showAddServerDialog"/>
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.person98.localminepanel.application.controllers.HelloController"
+      stylesheets="@styles/theme.css"
+      styleClass="container">
+    <MenuBar styleClass="menu-bar">
+        <Menu text="File" styleClass="menu">
+            <MenuItem text="Add Server" onAction="#showAddServerDialog" styleClass="menu-item"/>
             <SeparatorMenuItem/>
-            <MenuItem text="Exit"/>
+            <MenuItem text="Exit" styleClass="menu-item"/>
         </Menu>
     </MenuBar>
     
-    <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS" styleClass="split-pane">
         <!-- Server List -->
-        <VBox styleClass="sidebar">
-            <Label text="Servers" styleClass="sidebar-header"/>
-            <ListView fx:id="serverListView" VBox.vgrow="ALWAYS"/>
-            <Button text="Add Server" onAction="#showAddServerDialog" maxWidth="Infinity"/>
+        <VBox styleClass="container, sidebar">
+            <Label text="Servers" styleClass="header-label"/>
+            <ListView fx:id="serverListView" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+            <Button text="Add Server" onAction="#showAddServerDialog" maxWidth="Infinity" styleClass="button"/>
         </VBox>
         
         <!-- Server Details -->
-        <VBox fx:id="serverDetailsPane" styleClass="main-content" spacing="10">
+        <VBox fx:id="serverDetailsPane" styleClass="container, main-content" spacing="10">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
             
-            <TabPane VBox.vgrow="ALWAYS">
-                <Tab text="Console" closable="false">
-                    <VBox spacing="10">
-                        <!-- Server Controls -->
-                        <HBox spacing="10">
-                            <Button text="Start" onAction="#handleStartServer"/>
-                            <Button text="Stop" onAction="#handleStopServer"/>
-                            <Button text="Restart" onAction="#handleRestartServer"/>
-                        </HBox>
-                        
-                        <!-- Server Stats -->
-                        <GridPane vgap="5" hgap="10">
-                            <Label text="Address:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                            <Label fx:id="addressLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                            
-                            <Label text="Uptime:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                            <Label fx:id="uptimeLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-                            
-                            <Label text="CPU Usage:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                            <Label fx:id="cpuLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-                            
-                            <Label text="Memory:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                            <Label fx:id="memoryLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-                        </GridPane>
-                        
-                        <!-- Console -->
-                        <VBox VBox.vgrow="ALWAYS" styleClass="console-area">
-                            <TextArea fx:id="consoleOutput" VBox.vgrow="ALWAYS" styleClass="console"/>
-                            <TextField fx:id="commandInput" onAction="#handleSendCommand" promptText="Enter command..."/>
-                        </VBox>
-                    </VBox>
-                </Tab>
-                
-                <Tab text="Files" closable="false">
-                    <VBox spacing="10">
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Button text="Upload" onAction="#handleUploadFile"/>
-                            <Button text="Download" onAction="#handleDownloadFile"/>
-                            <Button text="Delete" onAction="#handleDeleteFile"/>
-                            <Button text="Archive" onAction="#handleArchiveFiles"/>
-                        </HBox>
-                        <TreeView fx:id="fileTreeView" VBox.vgrow="ALWAYS"/>
-                    </VBox>
-                </Tab>
-                
-                <Tab text="Settings" closable="false">
-                    <ScrollPane fitToWidth="true">
+            <StackPane VBox.vgrow="ALWAYS">
+                <Label text="Mine Panel Local" styleClass="welcome-text" visible="${!serverDetailsPane.visible}"/>
+                <TabPane VBox.vgrow="ALWAYS" styleClass="tab-pane" visible="${serverDetailsPane.visible}">
+                    <Tab text="Console" closable="false">
                         <VBox spacing="10">
-                            <TitledPane text="Server Properties" expanded="true">
-                                <VBox fx:id="serverPropertiesBox" spacing="5"/>
-                            </TitledPane>
+                            <!-- Server Controls -->
+                            <HBox spacing="10">
+                                <Button text="Start" onAction="#handleStartServer" styleClass="button"/>
+                                <Button text="Stop" onAction="#handleStopServer" styleClass="button"/>
+                                <Button text="Restart" onAction="#handleRestartServer" styleClass="button"/>
+                            </HBox>
                             
-                            <TitledPane text="Startup Settings" expanded="true">
-                                <GridPane vgap="5" hgap="10">
-                                    <Label text="Memory (MB):" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                                    <TextField fx:id="memoryField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                                    
-                                    <Label text="Java Arguments:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                                    <TextField fx:id="javaArgsField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-                                    
-                                    <Label text="Server Port:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                                    <TextField fx:id="portField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-                                    
-                                    <Label text="Server IP:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                                    <TextField fx:id="ipField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-                                </GridPane>
-                            </TitledPane>
+                            <!-- Server Stats -->
+                            <GridPane vgap="5" hgap="10">
+                                <Label text="Address:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                                <Label fx:id="addressLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="text-field"/>
+                                
+                                <Label text="Uptime:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                                <Label fx:id="uptimeLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="text-field"/>
+                                
+                                <Label text="CPU Usage:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                                <Label fx:id="cpuLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="text-field"/>
+                                
+                                <Label text="Memory:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
+                                <Label fx:id="memoryLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="text-field"/>
+                            </GridPane>
+                            
+                            <!-- Console -->
+                            <VBox VBox.vgrow="ALWAYS" styleClass="console-area">
+                                <TextArea fx:id="consoleOutput" VBox.vgrow="ALWAYS" styleClass="console"/>
+                                <TextField fx:id="commandInput" onAction="#handleSendCommand" promptText="Enter command..." styleClass="text-field"/>
+                            </VBox>
+                        </VBox>
+                    </Tab>
+                    
+                    <Tab text="Files" closable="false">
+                        <VBox spacing="10">
+                            <!-- Breadcrumb Navigation -->
+                            <HBox fx:id="breadcrumbNav" spacing="5" alignment="CENTER_LEFT" styleClass="breadcrumb-nav">
+                                <Button text="/" onAction="#handleNavigateHome" styleClass="breadcrumb-button"/>
+                            </HBox>
                             
                             <HBox spacing="10" alignment="CENTER_RIGHT">
-                                <Button text="Save Settings" onAction="#handleSaveSettings"/>
+                                <Button text="Download" onAction="#handleDownloadFile" styleClass="button"/>
+                                <Button text="Delete" onAction="#handleDeleteFile" styleClass="button"/>
                             </HBox>
+                            
+                            <SplitPane dividerPositions="0.7" VBox.vgrow="ALWAYS">
+                                <ListView fx:id="fileListView" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+                                
+                                <VBox spacing="10" styleClass="archive-panel">
+                                    <Label text="Archive Files" styleClass="header-label"/>
+                                    <ListView fx:id="selectedFilesList" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+                                    <TextField fx:id="archiveNameField" promptText="Archive name..." styleClass="text-field"/>
+                                    <HBox spacing="10">
+                                        <Button text="Add Selected" onAction="#handleAddToArchive" styleClass="button"/>
+                                        <Button text="Create Archive" onAction="#handleCreateArchive" styleClass="button"/>
+                                    </HBox>
+                                </VBox>
+                            </SplitPane>
                         </VBox>
-                    </ScrollPane>
-                </Tab>
-            </TabPane>
+                    </Tab>
+
+                    <Tab text="Settings" closable="false">
+                        <ScrollPane fitToWidth="true">
+                            <VBox spacing="10">
+                                <TitledPane text="Startup Settings" expanded="true">
+                                    <VBox spacing="5">
+                                        <GridPane vgap="5" hgap="10">
+                                            <Label text="Memory (MB):" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                                            <TextField fx:id="memoryField" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="text-field"/>
+
+                                            <Label text="Java Arguments:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                                            <TextField fx:id="javaArgsField" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="text-field"/>
+
+                                            <Label text="Server Port:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                                            <TextField fx:id="portField" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="text-field"/>
+
+                                            <Label text="Server IP:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
+                                            <TextField fx:id="ipField" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="text-field"/>
+                                        </GridPane>
+
+                                        <Label text="Startup Command:" styleClass="field-label"/>
+                                        <TextArea fx:id="startupCommandField" styleClass="text-field" wrapText="true"/>
+                                    </VBox>
+                                </TitledPane>
+
+                                <HBox spacing="10" alignment="CENTER_RIGHT">
+                                    <Button text="Save Settings" onAction="#handleSaveSettings" styleClass="button"/>
+                                </HBox>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+                </TabPane>
+            </StackPane>
         </VBox>
     </SplitPane>
 </VBox>

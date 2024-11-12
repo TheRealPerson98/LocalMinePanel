@@ -1,4 +1,4 @@
-package com.person98.localminepanel;
+package com.person98.localminepanel.core;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;

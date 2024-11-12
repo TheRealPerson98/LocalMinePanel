@@ -1,7 +1,10 @@
-package com.person98.localminepanel;
+package com.person98.localminepanel.application.controllers;
 
-import com.person98.localminepanel.templates.ServerTemplate;
-import com.person98.localminepanel.templates.TemplateManager;
+import com.person98.localminepanel.core.Server;
+import com.person98.localminepanel.services.installer.ServerInstaller;
+import com.person98.localminepanel.core.ServerManager;
+import com.person98.localminepanel.services.template.ServerTemplate;
+import com.person98.localminepanel.services.template.TemplateManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -138,6 +141,11 @@ public class AddServerDialogController {
         Map<String, String> properties = config.get("server.properties");
         for (Map.Entry<String, TextField> entry : configFields.entrySet()) {
             properties.put(entry.getKey(), entry.getValue().getText());
+        }
+        
+        // Save the initial startup command from template
+        if (template.getStartup() != null) {
+            server.setStartupCommand(template.getStartup().getCommand());
         }
     }
     

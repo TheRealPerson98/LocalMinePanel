@@ -1,4 +1,4 @@
-package com.person98.localminepanel;
+package com.person98.localminepanel.core;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -59,7 +59,7 @@ public class ServerManager {
         }
     }
 
-    void saveServers() {
+    public void saveServers() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(savePath.toFile()))) {
             oos.writeObject(new ArrayList<>(servers));
         } catch (IOException e) {

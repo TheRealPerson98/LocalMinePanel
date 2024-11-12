@@ -1,4 +1,4 @@
-package com.person98.localminepanel;
+package com.person98.localminepanel.core;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Files;
 
-import com.person98.localminepanel.templates.ServerTemplate;
+import com.person98.localminepanel.services.template.ServerTemplate;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +30,7 @@ public class Server implements Serializable {
     private String javaArgs = "-Dterminal.jline=false -Dterminal.ansi=true";
     private transient ServerProcess process;
     private transient ServerTemplate template;
+    private String startupCommand;
 
 
     public Server(String name, String type, String software) {
@@ -48,15 +49,28 @@ public class Server implements Serializable {
     }
 
     public String getStartupCommand() {
+        if (startupCommand != null && !startupCommand.isEmpty()) {
+            return startupCommand
+                .replace("{memory}", String.valueOf(memory))
+                .replace("{java_args}", javaArgs)
+                .replace("{server_jar}", serverJar);
+        }
+        
+        // Use template or fallback
         if (template != null) {
             return template.getStartup().getCommand()
                 .replace("{memory}", String.valueOf(memory))
                 .replace("{java_args}", javaArgs)
                 .replace("{server_jar}", serverJar);
         }
-        // Fallback for backward compatibility
+        
+        // Fallback
         return String.format("java -Xms128M -Xmx%dM %s -jar %s", 
             memory, javaArgs, serverJar);
+    }
+
+    public void setStartupCommand(String command) {
+        this.startupCommand = command;
     }
 
     public void start() throws IOException {

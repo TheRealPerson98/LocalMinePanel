@@ -1,5 +1,7 @@
-package com.person98.localminepanel;
+package com.person98.localminepanel.application.views;
 
+import com.person98.localminepanel.core.Server;
+import com.person98.localminepanel.core.ServerManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;

@@ -1,14 +1,13 @@
-package com.person98.localminepanel;
+package com.person98.localminepanel.services.installer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.person98.localminepanel.templates.DownloadConfig;
-import com.person98.localminepanel.templates.ServerTemplate;
-import com.person98.localminepanel.templates.TemplateManager;
+import com.person98.localminepanel.core.Server;
+import com.person98.localminepanel.services.template.models.DownloadConfig;
+import com.person98.localminepanel.services.template.ServerTemplate;
 
 import java.io.*;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.*;
 import java.nio.file.*;
 import java.util.Map;
@@ -140,10 +139,18 @@ public class ServerInstaller {
     }
 
     private static void createStartScripts(Server server, ServerTemplate template, Path serverDir) throws IOException {
+        System.out.println("Creating start scripts...");
+        System.out.println("Template: " + template);
+        System.out.println("Server memory: " + server.getMemory());
+        System.out.println("Server java args: " + server.getJavaArgs());
+        System.out.println("Server jar: " + server.getServerJar());
+        
         String command = template.getStartup().getCommand()
             .replace("{memory}", String.valueOf(server.getMemory()))
             .replace("{java_args}", server.getJavaArgs())
             .replace("{server_jar}", server.getServerJar());
+        
+        System.out.println("Generated command: " + command);
 
         // Create Windows batch script
         String batchScript = "@echo off\n" + command + "\npause";
