@@ -1,13 +1,29 @@
 # LocalMinePanel
 
-A clean, modern Minecraft server management tool for developers. Easily manage multiple local Minecraft servers with a simple GUI interface.
+A clean, modern Minecraft server management tool for developers (currently in early alpha development).
 
-<p align="center">
-  <img src="screenshot.png" alt="LocalMinePanel Screenshot" width="800">
-</p>
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Java Version](https://img.shields.io/badge/Java-17%2B-blue)](https://www.oracle.com/java/)
+
+> ⚠️ **Note:** This project is in very early development and many features are not yet implemented or fully functional.
+
+## 🚧 Current Status
+
+- Basic UI framework implemented
+- Core functionality still under development
+- Limited feature set currently working
+
+## 🔜 Upcoming Features
+
+- 🎨 Multiple themes and customizable UI
+- 📦 Easy server template importing system
+- 🚀 Core functionality improvements:
+  - Server creation and management
+  - Console integration
+  - File management
+  - Performance monitoring
+- 🛠️ Plugin and mod management tools
+- 💾 Backup and restore functionality
 
 ## ✨ Features
 
@@ -30,18 +46,21 @@ A clean, modern Minecraft server management tool for developers. Easily manage m
 
 ### Installation
 
-1. Download the latest release from the [releases page](https://github.com/yourusername/LocalMinePanel/releases)
-2. Extract the archive to your preferred location
-3. Run the application:
-   ```bash
-   java -jar LocalMinePanel.jar
-   ```
+1. Download the latest release from the [releases page](https://github.com/TheRealPerson98/LocalMinePanel/releases)
+2. Double-click the downloaded `LocalMinePanel.jar` file to run the application
+
+If double-clicking doesn't work, you can also run it from the command line:
+```bash
+java -jar LocalMinePanel.jar
+```
+
+> **Note:** Make sure you have Java 17 or higher installed on your system. You can download it from [Oracle](https://www.oracle.com/java/technologies/downloads/#java17) or [Amazon Corretto](https://aws.amazon.com/corretto/).
 
 ### Building from Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/LocalMinePanel.git
+git clone https://github.com/TheRealPerson98/LocalMinePanel.git
 
 # Navigate to the project directory
 cd LocalMinePanel
@@ -105,7 +124,7 @@ src/main/java/com/person98/localminepanel/
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
 ## 👏 Acknowledgments
 
@@ -120,6 +139,26 @@ Need help? Here's what to do:
 1. Check the [FAQ](docs/FAQ.md)
 2. Search existing [issues](https://github.com/TheRealPerson98/LocalMinePanel/issues)
 3. Create a new issue if needed
+
+## ⚠️ Known Limitations
+
+Currently, many features shown in the documentation are planned but not yet implemented. The application is in active development, and breaking changes may occur frequently.
+
+## 🗺️ Roadmap
+
+1. **Phase 1** (Current)
+   - Basic UI implementation
+   - Core server management functionality
+
+2. **Phase 2**
+   - Theme system implementation
+   - Template management
+   - Basic server controls
+
+3. **Phase 3**
+   - Advanced features
+   - Plugin management
+   - Performance optimization
 
 ---
 
