@@ -11,11 +11,17 @@ import javafx.scene.text.Text;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import javafx.application.Platform;
 
 public class ServerListCell extends ListCell<Server> {
     private final HBox content;
     private final Text text;
     private final Button deleteButton;
+    private Server currentServer;
+    private Timeline updateTimeline;
 
     public ServerListCell() {
         text = new Text();
@@ -33,16 +39,26 @@ public class ServerListCell extends ListCell<Server> {
         
         content = new HBox(5);
         content.getChildren().addAll(text, spacer, deleteButton);
+
+        // Create timeline for updates
+        updateTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> updateStatus())
+        );
+        updateTimeline.setCycleCount(Timeline.INDEFINITE);
     }
 
     @Override
     protected void updateItem(Server server, boolean empty) {
         super.updateItem(server, empty);
         
+        // Stop timeline for old server
+        updateTimeline.stop();
+        currentServer = server;
+        
         if (empty || server == null) {
             setGraphic(null);
         } else {
-            text.setText(server.getName() + (server.isRunning() ? " (Running)" : " (Stopped)"));
+            updateStatus();
             deleteButton.setOnAction(e -> {
                 if (server.isRunning()) {
                     try {
@@ -54,6 +70,27 @@ public class ServerListCell extends ListCell<Server> {
                 ServerManager.getInstance().removeServer(server);
             });
             setGraphic(content);
+            updateTimeline.play();
         }
+    }
+
+    private void updateStatus() {
+        if (currentServer == null) return;
+        
+        Platform.runLater(() -> {
+            String status;
+            try {
+                if (currentServer.isRunning()) {
+                    status = " (Online)";
+                } else if (currentServer.getProcess() != null) {
+                    status = " (Starting)";
+                } else {
+                    status = " (Offline)";
+                }
+            } catch (Exception e) {
+                status = " (Offline)";
+            }
+            text.setText(currentServer.getName() + status);
+        });
     }
 } 

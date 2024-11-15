@@ -1,19 +1,18 @@
 package com.person98.localminepanel.core;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.UUID;
-import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Properties;
-import java.io.OutputStream;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Files;
 
 import com.person98.localminepanel.services.template.ServerTemplate;
 import lombok.Getter;
 import lombok.Setter;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 @Getter
 @Setter
@@ -31,13 +30,14 @@ public class Server implements Serializable {
     private transient ServerProcess process;
     private transient ServerTemplate template;
     private String startupCommand;
-
+    private transient ObjectProperty<ServerProcess> processProperty = new SimpleObjectProperty<>();
 
     public Server(String name, String type, String software) {
         this.uuid = UUID.randomUUID().toString();
         this.name = name;
         this.type = type;
         this.software = software;
+        this.processProperty.set(null);
     }
     
     public String getServerPath() {
@@ -74,25 +74,31 @@ public class Server implements Serializable {
     }
 
     public void start() throws IOException {
-        if (process == null) {
-            process = new ServerProcess(this);
+        if (processProperty.get() == null) {
+            processProperty.set(new ServerProcess(this));
         }
-        process.start();
+        processProperty.get().start();
     }
 
     public void stop() throws IOException {
-        if (process != null) {
-            process.stop();
-            process = null;
+        if (processProperty.get() != null) {
+            processProperty.get().stop();
+            processProperty.set(null);
         }
     }
 
     public boolean isRunning() {
-        return process != null && process.isRunning();
+        return processProperty != null && 
+               processProperty.get() != null && 
+               processProperty.get().isRunning();
     }
 
     public ServerProcess getProcess() {
-        return process;
+        return processProperty.get();
+    }
+
+    public ObjectProperty<ServerProcess> processProperty() {
+        return processProperty;
     }
 
     @Override
@@ -121,5 +127,11 @@ public class Server implements Serializable {
         }
         
         return new HashMap<>((Map) props);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        // Reinitialize transient fields
+        processProperty = new SimpleObjectProperty<>();
     }
 } 

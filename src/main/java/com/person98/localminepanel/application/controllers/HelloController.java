@@ -198,8 +198,7 @@ public class HelloController {
     @FXML
     private void showAddServerDialog() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("add-server-dialog.fxml"));
-            Stage dialogStage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/person98/localminepanel/add-server-dialog.fxml"));            Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.setTitle("Add New Server");
             dialogStage.setScene(new Scene(loader.load()));
