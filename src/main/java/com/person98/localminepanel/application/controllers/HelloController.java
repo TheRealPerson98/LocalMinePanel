@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Set;
 
 public class HelloController {
     @FXML private ListView<Server> serverListView;
@@ -54,6 +55,9 @@ public class HelloController {
 
     private Timeline updateTimeline;
     private Server selectedServer;
+
+    @FXML private TextArea fileEditor;
+    private Path currentEditingFile;
 
     @FXML
     public void initialize() {
@@ -104,17 +108,14 @@ public class HelloController {
 
         // Setup file list click handler
         fileListView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                String selected = fileListView.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    if (selected.equals("..")) {
-                        // Go to parent directory
-                        String parent = currentPath.substring(0, currentPath.lastIndexOf('/', currentPath.length() - 2) + 1);
-                        navigateTo(parent);
-                    } else if (selected.endsWith("/")) {
-                        // Navigate into directory
-                        navigateTo(currentPath + selected);
-                    }
+            String selected = fileListView.getSelectionModel().getSelectedItem();
+            if (selected != null && !selected.isEmpty()) {
+                if (selected.equals("..")) {
+                    navigateUp();
+                } else if (Files.isDirectory(Paths.get(selectedServer.getServerPath(), currentPath, selected))) {
+                    navigateToDirectory(selected);
+                } else {
+                    loadFileContent(selected);
                 }
             }
         });
@@ -256,7 +257,65 @@ public class HelloController {
             }
         }).start();
     }
-    
+
+    private void loadFileContent(String filename) {
+        if (selectedServer == null) return;
+        
+        try {
+            Path filePath = Paths.get(selectedServer.getServerPath(), currentPath, filename);
+            currentEditingFile = filePath;
+            String content = Files.readString(filePath);
+            fileEditor.setText(content);
+            
+            // Set editable based on file extension
+            String extension = getFileExtension(filename).toLowerCase();
+            boolean isEditable = isEditableFileType(extension);
+            fileEditor.setEditable(isEditable);
+            
+        } catch (IOException e) {
+            showError("Error Loading File", e);
+        }
+    }
+
+    private String getFileExtension(String filename) {
+        int lastDotIndex = filename.lastIndexOf('.');
+        return lastDotIndex > 0 ? filename.substring(lastDotIndex + 1) : "";
+    }
+
+    private boolean isEditableFileType(String extension) {
+        Set<String> editableExtensions = Set.of(
+            "txt", "log", "properties", "json", "yml", "yaml", "xml",
+            "css", "js", "java", "sh", "bat", "cmd", "ini", "cfg",
+            "conf", "config", "md", "markdown", "html", "htm"
+        );
+        return editableExtensions.contains(extension.toLowerCase());
+    }
+
+    @FXML
+    private void handleSaveFile() {
+        if (currentEditingFile == null) return;
+        
+        try {
+            Files.writeString(currentEditingFile, fileEditor.getText());
+            showInfo("File saved successfully");
+        } catch (IOException e) {
+            showError("Error Saving File", e);
+        }
+    }
+
+    @FXML
+    private void handleReloadFile() {
+        if (currentEditingFile == null) return;
+        
+        try {
+            String content = Files.readString(currentEditingFile);
+            fileEditor.setText(content);
+            showInfo("File reloaded");
+        } catch (IOException e) {
+            showError("Error Reloading File", e);
+        }
+    }
+
     private void showError(String header, Exception e) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -520,5 +579,18 @@ public class HelloController {
         } else {
             showError("No Files Selected", new Exception("Please select files to archive"));
         }
+    }
+
+    private void navigateUp() {
+        if (!currentPath.isEmpty()) {
+            int lastSlash = currentPath.lastIndexOf('/', currentPath.length() - 2);
+            currentPath = lastSlash >= 0 ? currentPath.substring(0, lastSlash + 1) : "";
+            updateFileList();
+        }
+    }
+
+    private void navigateToDirectory(String dirName) {
+        currentPath += dirName + "/";
+        updateFileList();
     }
 }

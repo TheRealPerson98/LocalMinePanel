@@ -71,9 +71,20 @@
                                 <Button text="Delete" onAction="#handleDeleteFile" styleClass="button"/>
                             </HBox>
                             
-                            <SplitPane dividerPositions="0.7" VBox.vgrow="ALWAYS">
+                            <SplitPane dividerPositions="0.3, 0.7" VBox.vgrow="ALWAYS">
+                                <!-- File List -->
                                 <ListView fx:id="fileListView" VBox.vgrow="ALWAYS" styleClass="list-view"/>
                                 
+                                <!-- Text Editor -->
+                                <VBox spacing="10">
+                                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                                        <Button text="Save" onAction="#handleSaveFile" styleClass="button"/>
+                                        <Button text="Reload" onAction="#handleReloadFile" styleClass="button"/>
+                                    </HBox>
+                                    <TextArea fx:id="fileEditor" VBox.vgrow="ALWAYS" styleClass="code-editor"/>
+                                </VBox>
+                                
+                                <!-- Archive Panel -->
                                 <VBox spacing="10" styleClass="archive-panel">
                                     <Label text="Archive Files" styleClass="header-label"/>
                                     <ListView fx:id="selectedFilesList" VBox.vgrow="ALWAYS" styleClass="list-view"/>
