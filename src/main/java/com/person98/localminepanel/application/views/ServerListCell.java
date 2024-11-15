@@ -78,8 +78,8 @@ public class ServerListCell extends ListCell<Server> {
         if (currentServer == null) return;
         
         Platform.runLater(() -> {
-            String status;
             try {
+                String status;
                 if (currentServer.isRunning()) {
                     status = " (Online)";
                 } else if (currentServer.getProcess() != null) {
@@ -87,10 +87,10 @@ public class ServerListCell extends ListCell<Server> {
                 } else {
                     status = " (Offline)";
                 }
+                text.setText(currentServer.getName() + status);
             } catch (Exception e) {
-                status = " (Offline)";
+                text.setText(currentServer.getName() + " (Unknown)");
             }
-            text.setText(currentServer.getName() + status);
         });
     }
 } 

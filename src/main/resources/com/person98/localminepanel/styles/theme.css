@@ -7,7 +7,7 @@
     -fx-background-card: #1e1e1e;
     -fx-background-hover: #2d2d2d;
     -fx-text-primary: #ffffff;
-    -fx-text-secondary: #b0b0b0;
+    -fx-text-secondary: #ffffff;
     -fx-text-disabled: #6c6c6c;
     -fx-success: #43a047;
     -fx-warning: #ffa000;
@@ -182,6 +182,10 @@
     -fx-padding: 8px;
 }
 
+.list-cell .text, .tree-cell .text {
+    -fx-fill: -fx-text-primary;
+}
+
 .list-cell:hover, .tree-cell:hover {
     -fx-background-color: -fx-background-hover;
 }
@@ -199,7 +203,7 @@
 }
 
 .field-label {
-    -fx-text-fill: -fx-text-secondary;
+    -fx-text-fill: white;
     -fx-font-size: 13px;
 }
 
@@ -323,4 +327,172 @@
 
 .code-editor .scroll-pane .content {
     -fx-background-color: -fx-background-dark;
+}
+
+/* Status Indicators */
+.status-indicator {
+    -fx-fill: #666;
+}
+.status-indicator.online {
+    -fx-fill: #2ecc71;
+}
+.status-indicator.offline {
+    -fx-fill: #e74c3c;
+}
+
+/* Modern Stats Panel */
+.stats-panel {
+    -fx-background-color: derive(-fx-background, -5%);
+    -fx-padding: 15;
+    -fx-background-radius: 8;
+}
+.stat-tile {
+    -fx-background-color: derive(-fx-background, 5%);
+    -fx-padding: 15;
+    -fx-background-radius: 6;
+    -fx-min-width: 200;
+}
+.stat-label {
+    -fx-font-size: 0.9em;
+    -fx-text-fill: white;
+}
+.stat-value {
+    -fx-font-size: 1.2em;
+    -fx-font-weight: bold;
+}
+
+/* Console Styling */
+.console-container {
+    -fx-background-color: derive(-fx-background, -3%);
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+.console-output {
+    -fx-font-family: 'JetBrains Mono', 'Consolas', monospace;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+}
+.command-input {
+    -fx-padding: 8 12;
+    -fx-background-radius: 6;
+}
+
+/* Make status text white */
+.status-text {
+    -fx-text-fill: white;
+}
+
+/* Modern Button styles */
+.modern-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-primary;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+    -fx-min-width: 100px;
+    -fx-alignment: CENTER;
+}
+
+.modern-button:hover {
+    -fx-background-color: -fx-primary-light;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 0, 2);
+    -fx-translate-y: -1px;
+}
+
+.modern-button:pressed {
+    -fx-background-color: -fx-primary-dark;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+    -fx-translate-y: 1px;
+}
+
+/* Button variants */
+.modern-button.danger {
+    -fx-background-color: -fx-error;
+}
+
+.modern-button.danger:hover {
+    -fx-background-color: derive(-fx-error, 10%);
+}
+
+.modern-button.success {
+    -fx-background-color: -fx-success;
+}
+
+.modern-button.success:hover {
+    -fx-background-color: derive(-fx-success, 10%);
+}
+
+/* Enhanced Server List */
+.sidebar {
+    -fx-background-color: derive(-fx-background-dark, -3%);
+    -fx-padding: 0;
+}
+
+.sidebar-header {
+    -fx-padding: 15px;
+    -fx-background-color: derive(-fx-background-dark, -5%);
+    -fx-border-color: -fx-border-light;
+    -fx-border-width: 0 0 1 0;
+}
+
+.modern-list-view {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+}
+
+.modern-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.modern-list-view .list-cell:selected {
+    -fx-background-color: -fx-primary;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);
+}
+
+/* Enhanced Status Bar */
+.status-bar {
+    -fx-background-color: derive(-fx-background-card, -5%);
+    -fx-padding: 10px 15px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.status-indicator {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 3, 0, 0, 0);
+}
+
+/* Enhanced Console */
+.console-container {
+    -fx-background-color: derive(-fx-background-dark, -2%);
+    -fx-background-radius: 8px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+}
+
+.command-input-container {
+    -fx-padding: 10px;
+    -fx-background-color: derive(-fx-background-dark, -5%);
+    -fx-background-radius: 6px;
+}
+
+/* Modern Action Buttons */
+.action-button {
+    -fx-background-radius: 6px;
+    -fx-min-width: 100px;
+    -fx-padding: 8px 16px;
+    -fx-graphic-text-gap: 8px;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.action-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }

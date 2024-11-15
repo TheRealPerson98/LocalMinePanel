@@ -4,57 +4,129 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" 
+<?import javafx.scene.shape.Circle?>
+<?import java.lang.String?>
+<VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.person98.localminepanel.application.controllers.HelloController"
       stylesheets="@styles/theme.css"
       styleClass="container">
     
     <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS" styleClass="split-pane">
-        <!-- Server List -->
+        <!-- Server List - Enhanced -->
         <VBox styleClass="container, sidebar">
-            <Label text="Servers" styleClass="header-label"/>
-            <ListView fx:id="serverListView" VBox.vgrow="ALWAYS" styleClass="list-view"/>
-            <Button text="Add Server" onAction="#showAddServerDialog" maxWidth="Infinity" styleClass="button"/>
+            <HBox styleClass="sidebar-header" alignment="CENTER">
+                <FontAwesomeIconView glyphName="SERVER" size="16" styleClass="header-icon"/>
+                <Label text="Servers" styleClass="header-label"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button styleClass="icon-button" onAction="#showAddServerDialog">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PLUS" size="14"/>
+                    </graphic>
+                </Button>
+            </HBox>
+            <ListView fx:id="serverListView" VBox.vgrow="ALWAYS" styleClass="modern-list-view"/>
         </VBox>
         
-        <!-- Server Details -->
-        <VBox fx:id="serverDetailsPane" styleClass="container, main-content" spacing="10">
+        <!-- Server Details - Enhanced -->
+        <VBox fx:id="serverDetailsPane" styleClass="container, main-content" spacing="15">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
             
             <StackPane VBox.vgrow="ALWAYS">
-                <Label text="Mine Panel Local" styleClass="welcome-text" visible="${!serverDetailsPane.visible}"/>
-                <TabPane VBox.vgrow="ALWAYS" styleClass="tab-pane" visible="${serverDetailsPane.visible}">
+                <VBox styleClass="welcome-container" alignment="CENTER" spacing="20"
+                      fx:id="welcomeScreen">
+                    <FontAwesomeIconView glyphName="MINECRAFT" size="64" styleClass="welcome-icon"/>
+                    <Label text="Mine Panel Local" styleClass="welcome-text"/>
+                    <Label text="Select a server to begin" styleClass="welcome-subtext"/>
+                </VBox>
+                
+                <TabPane VBox.vgrow="ALWAYS" styleClass="modern-tab-pane" 
+                         fx:id="serverTabPane">
+                    <!-- Console Tab - Redesigned -->
                     <Tab text="Console" closable="false">
-                        <VBox spacing="10">
-                            <!-- Server Controls -->
-                            <HBox spacing="10">
-                                <Button text="Start" onAction="#handleStartServer" styleClass="button"/>
-                                <Button text="Stop" onAction="#handleStopServer" styleClass="button"/>
-                                <Button text="Restart" onAction="#handleRestartServer" styleClass="button"/>
+                        <VBox spacing="20">
+                            <!-- Enhanced Server Status Bar -->
+                            <HBox styleClass="status-bar" spacing="20" alignment="CENTER_LEFT">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Circle fx:id="serverStatusIndicator" radius="6" styleClass="status-indicator"/>
+                                    <VBox spacing="2">
+                                        <Label fx:id="serverStatusLabel" text="Server Status" 
+                                               styleClass="status-text, status-title"/>
+                                        <Label fx:id="addressLabel" text="Not Connected" 
+                                               styleClass="status-text, status-detail"/>
+                                    </VBox>
+                                </HBox>
+                                
+                                <Separator orientation="VERTICAL"/>
+                                
+                                <HBox spacing="15" alignment="CENTER_LEFT">
+                                    <VBox spacing="2" styleClass="stat-container">
+                                        <Label text="Uptime" styleClass="stat-label"/>
+                                        <Label fx:id="uptimeLabel" text="Server Offline" 
+                                               styleClass="stat-value"/>
+                                    </VBox>
+                                    <VBox spacing="2" styleClass="stat-container">
+                                        <Label text="CPU" styleClass="stat-label"/>
+                                        <Label fx:id="cpuLabel" text="0%" styleClass="stat-value"/>
+                                    </VBox>
+                                    <VBox spacing="2" styleClass="stat-container">
+                                        <Label text="Memory" styleClass="stat-label"/>
+                                        <Label fx:id="memoryLabel" text="0MB" styleClass="stat-value"/>
+                                    </VBox>
+                                </HBox>
+                                
+                                <Region HBox.hgrow="ALWAYS"/>
+                                
+                                <HBox spacing="10" styleClass="server-controls">
+                                    <Button text="Start" onAction="#handleStartServer" 
+                                            styleClass="action-button, success">
+                                        <graphic>
+                                            <FontAwesomeIconView glyphName="PLAY" size="14"/>
+                                        </graphic>
+                                    </Button>
+                                    <Button text="Stop" onAction="#handleStopServer" 
+                                            styleClass="action-button, danger">
+                                        <graphic>
+                                            <FontAwesomeIconView glyphName="STOP" size="14"/>
+                                        </graphic>
+                                    </Button>
+                                    <Button text="Restart" onAction="#handleRestartServer" 
+                                            styleClass="action-button">
+                                        <graphic>
+                                            <FontAwesomeIconView glyphName="REFRESH" size="14"/>
+                                        </graphic>
+                                    </Button>
+                                </HBox>
                             </HBox>
-                            
-                            <!-- Server Stats -->
-                            <GridPane vgap="5" hgap="10">
-                                <Label text="Address:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
-                                <Label fx:id="addressLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="text-field"/>
+
+                            <!-- Enhanced Console Output -->
+                            <VBox VBox.vgrow="ALWAYS" styleClass="console-container">
+                                <TextArea fx:id="consoleOutput" 
+                                         styleClass="console-output"
+                                         VBox.vgrow="ALWAYS"
+                                         editable="false"
+                                         wrapText="true"/>
                                 
-                                <Label text="Uptime:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
-                                <Label fx:id="uptimeLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="text-field"/>
-                                
-                                <Label text="CPU Usage:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
-                                <Label fx:id="cpuLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="text-field"/>
-                                
-                                <Label text="Memory:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
-                                <Label fx:id="memoryLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="text-field"/>
-                            </GridPane>
-                            
-                            <!-- Console -->
-                            <VBox VBox.vgrow="ALWAYS" styleClass="console-area">
-                                <TextArea fx:id="consoleOutput" VBox.vgrow="ALWAYS" styleClass="console"/>
-                                <TextField fx:id="commandInput" onAction="#handleSendCommand" promptText="Enter command..." styleClass="text-field"/>
+                                <!-- Modern Command Input -->
+                                <HBox styleClass="command-input-container" spacing="10">
+                                    <TextField fx:id="commandInput" 
+                                              HBox.hgrow="ALWAYS"
+                                              styleClass="command-input"
+                                              promptText="Type a command...">
+                                    </TextField>
+                                    <Button onAction="#handleSendCommand" 
+                                            styleClass="send-button">
+                                        <graphic>
+                                            <FontAwesomeIconView glyphName="PAPER_PLANE" styleClass="send-icon"/>
+                                        </graphic>
+                                        <tooltip>
+                                            <Tooltip text="Send Command"/>
+                                        </tooltip>
+                                    </Button>
+                                </HBox>
                             </VBox>
                         </VBox>
                     </Tab>

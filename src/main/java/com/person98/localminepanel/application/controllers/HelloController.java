@@ -67,6 +67,9 @@ public class HelloController {
     @FXML
     private HBox fileActionsBox;
 
+    @FXML private VBox welcomeScreen;
+    @FXML private TabPane serverTabPane;
+
     @FXML
     public void initialize() {
         serverListView.setItems(ServerManager.getInstance().getServers());
@@ -148,6 +151,9 @@ public class HelloController {
         });
 
         fileListView.setCellFactory(listView -> new FileListCell());
+
+        welcomeScreen.setVisible(true);
+        serverTabPane.setVisible(false);
     }
     
     private void updateMonitoring() {
@@ -338,10 +344,13 @@ public class HelloController {
     
     private void updateServerDetails(Server server) {
         if (server != null) {
-            serverDetailsPane.setVisible(true);
+            welcomeScreen.setVisible(false);
+            serverTabPane.setVisible(true);
             
             // Update basic info
-            addressLabel.setText(server.getIp() + ":" + server.getPort());
+            if (addressLabel != null) {
+                addressLabel.setText(server.getIp() + ":" + server.getPort());
+            }
             
             // Update settings fields
             memoryField.setText(String.valueOf(server.getMemory()));
@@ -371,7 +380,8 @@ public class HelloController {
             
             startupCommandField.setText(server.getStartupCommand());
         } else {
-            serverDetailsPane.setVisible(false);
+            welcomeScreen.setVisible(true);
+            serverTabPane.setVisible(false);
         }
     }
     
