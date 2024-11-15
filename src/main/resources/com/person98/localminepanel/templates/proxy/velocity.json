@@ -1,0 +1,43 @@
+{
+    "name": "Velocity",
+    "author": "PaperMC",
+    "description": "Modern, fast, and feature-rich Minecraft proxy server",
+    "version_url": "https://api.papermc.io/v2/projects/velocity",
+    "download": {
+        "type": "paper_api",
+        "base_url": "https://api.papermc.io/v2/projects/velocity/versions/{version}/builds/{build}/downloads/velocity-{version}-{build}.jar",
+        "version_path": "versions",
+        "latest_version_path": "versions[-1]",
+        "build_url": "versions/{version}",
+        "build_path": "builds",
+        "latest_build_path": "builds[-1]"
+    },
+    "config": {
+        "velocity.toml": {
+            "bind": "0.0.0.0:25577",
+            "motd": "&#09add3A Velocity Server",
+            "show-max-players": 500,
+            "online-mode": true,
+            "force-key-authentication": true,
+            "prevent-client-proxy-connections": false,
+            "player-info-forwarding-mode": "modern",
+            "forwarding-secret": "CHANGE_ME",
+            "announce-forge": false,
+            "kick-existing-players": false
+        }
+    },
+    "startup": {
+        "command": "java -Xms{min_memory}M -Xmx{memory}M {java_args} -jar {server_jar}",
+        "done_regex": "Listening on",
+        "variables": {
+            "min_memory": "512",
+            "memory": "512",
+            "java_args": "-XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch",
+            "server_jar": "velocity.jar"
+        }
+    },
+    "stop": {
+        "command": "end",
+        "timeout": 30
+    }
+} 

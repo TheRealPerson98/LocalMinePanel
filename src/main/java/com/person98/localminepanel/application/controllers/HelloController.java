@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.animation.KeyFrame;
@@ -117,6 +118,25 @@ public class HelloController {
                 }
             }
         });
+
+        // Add shutdown hook
+        Platform.runLater(() -> {
+            Stage stage = (Stage) serverListView.getScene().getWindow();
+            stage.setOnCloseRequest(event -> {
+                // Stop all running servers
+                for (Server server : ServerManager.getInstance().getServers()) {
+                    if (server.isRunning()) {
+                        try {
+                            server.stop();
+                            // Wait briefly for server to stop
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        });
     }
     
     private void updateMonitoring() {
@@ -214,7 +234,22 @@ public class HelloController {
                 String line;
                 while ((line = selectedServer.getProcess().readLine()) != null) {
                     final String consoleLine = line;
-                    Platform.runLater(() -> consoleOutput.appendText(consoleLine + "\n"));
+                    Platform.runLater(() -> {
+                        Text text = new Text(consoleLine + "\n");
+                        
+                        // Apply different styles based on the content
+                        if (consoleLine.contains("INFO")) {
+                            text.getStyleClass().add("info");
+                        } else if (consoleLine.contains("WARN")) {
+                            text.getStyleClass().add("warning");
+                        } else if (consoleLine.contains("ERROR")) {
+                            text.getStyleClass().add("error");
+                        } else if (consoleLine.contains("Done")) {
+                            text.getStyleClass().add("success");
+                        }
+                        
+                        consoleOutput.appendText(consoleLine + "\n");
+                    });
                 }
             } catch (IOException e) {
                 e.printStackTrace();

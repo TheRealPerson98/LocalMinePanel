@@ -9,13 +9,6 @@
       fx:controller="com.person98.localminepanel.application.controllers.HelloController"
       stylesheets="@styles/theme.css"
       styleClass="container">
-    <MenuBar styleClass="menu-bar">
-        <Menu text="File" styleClass="menu">
-            <MenuItem text="Add Server" onAction="#showAddServerDialog" styleClass="menu-item"/>
-            <SeparatorMenuItem/>
-            <MenuItem text="Exit" styleClass="menu-item"/>
-        </Menu>
-    </MenuBar>
     
     <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS" styleClass="split-pane">
         <!-- Server List -->

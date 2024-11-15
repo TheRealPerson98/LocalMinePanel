@@ -30,7 +30,7 @@ public class ServerListCell extends ListCell<Server> {
         
         // Create trash can icon
         FontAwesomeIconView trashIcon = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
-        trashIcon.setStyle("-fx-fill: #ff4444;");
+        trashIcon.setStyle("-fx-fill: #ff4444; -fx-font-family: 'FontAwesome'; -fx-font-size: 16px;");
         deleteButton.setGraphic(trashIcon);
         deleteButton.getStyleClass().add("delete-button");
         
