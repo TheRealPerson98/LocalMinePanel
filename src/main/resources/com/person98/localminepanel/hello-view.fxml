@@ -66,14 +66,22 @@
                                 <Button text="/" onAction="#handleNavigateHome" styleClass="breadcrumb-button"/>
                             </HBox>
                             
+                            <!-- File Actions -->
                             <HBox spacing="10" alignment="CENTER_RIGHT">
-                                <Button text="Download" onAction="#handleDownloadFile" styleClass="button"/>
-                                <Button text="Delete" onAction="#handleDeleteFile" styleClass="button"/>
+                                <CheckBox text="Select All" onAction="#handleSelectAll" fx:id="selectAllCheckbox"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <HBox fx:id="fileActionsBox" spacing="10" visible="false">
+                                    <Button text="Delete" onAction="#handleDeleteFiles" styleClass="button"/>
+                                    <Button text="Archive" onAction="#handleArchiveFiles" styleClass="button"/>
+                                    <Button text="Move" onAction="#handleMoveFiles" styleClass="button"/>
+                                </HBox>
                             </HBox>
                             
                             <SplitPane dividerPositions="0.3, 0.7" VBox.vgrow="ALWAYS">
-                                <!-- File List -->
-                                <ListView fx:id="fileListView" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+                                <!-- File List with Checkboxes -->
+                                <VBox spacing="5">
+                                    <ListView fx:id="fileListView" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+                                </VBox>
                                 
                                 <!-- Text Editor -->
                                 <VBox spacing="10">
@@ -82,17 +90,6 @@
                                         <Button text="Reload" onAction="#handleReloadFile" styleClass="button"/>
                                     </HBox>
                                     <TextArea fx:id="fileEditor" VBox.vgrow="ALWAYS" styleClass="code-editor"/>
-                                </VBox>
-                                
-                                <!-- Archive Panel -->
-                                <VBox spacing="10" styleClass="archive-panel">
-                                    <Label text="Archive Files" styleClass="header-label"/>
-                                    <ListView fx:id="selectedFilesList" VBox.vgrow="ALWAYS" styleClass="list-view"/>
-                                    <TextField fx:id="archiveNameField" promptText="Archive name..." styleClass="text-field"/>
-                                    <HBox spacing="10">
-                                        <Button text="Add Selected" onAction="#handleAddToArchive" styleClass="button"/>
-                                        <Button text="Create Archive" onAction="#handleCreateArchive" styleClass="button"/>
-                                    </HBox>
                                 </VBox>
                             </SplitPane>
                         </VBox>

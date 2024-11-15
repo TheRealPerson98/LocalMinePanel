@@ -1,5 +1,6 @@
 package com.person98.localminepanel.application.controllers;
 
+import com.person98.localminepanel.application.views.FileListCell;
 import com.person98.localminepanel.core.Server;
 import com.person98.localminepanel.services.file.ServerFileManager;
 import com.person98.localminepanel.core.ServerManager;
@@ -32,6 +33,8 @@ import java.util.Properties;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.Comparator;
 
 public class HelloController {
     @FXML private ListView<Server> serverListView;
@@ -58,6 +61,11 @@ public class HelloController {
 
     @FXML private TextArea fileEditor;
     private Path currentEditingFile;
+
+    @FXML
+    private CheckBox selectAllCheckbox;
+    @FXML
+    private HBox fileActionsBox;
 
     @FXML
     public void initialize() {
@@ -138,6 +146,8 @@ public class HelloController {
                 }
             });
         });
+
+        fileListView.setCellFactory(listView -> new FileListCell());
     }
     
     private void updateMonitoring() {
@@ -592,5 +602,202 @@ public class HelloController {
     private void navigateToDirectory(String dirName) {
         currentPath += dirName + "/";
         updateFileList();
+    }
+
+    @FXML
+    private void handleSelectAll() {
+        boolean selectAll = selectAllCheckbox.isSelected();
+        fileListView.getItems().forEach(item -> 
+            fileListView.getProperties().put("selected_" + item, selectAll));
+        fileListView.refresh();
+        fileActionsBox.setVisible(selectAll);
+    }
+
+    @FXML
+    private void handleDeleteFiles() {
+        List<String> selectedFiles = getSelectedFiles();
+        if (selectedFiles.isEmpty()) return;
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm Delete");
+        confirm.setHeaderText("Delete Selected Files");
+        confirm.setContentText("Are you sure you want to delete " + selectedFiles.size() + " selected files?");
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                List<String> failedDeletes = new ArrayList<>();
+                
+                for (String fileName : selectedFiles) {
+                    try {
+                        Path filePath = Path.of(selectedServer.getServerPath(), currentPath, fileName);
+                        if (Files.isDirectory(filePath)) {
+                            // Delete directory and its contents
+                            Files.walk(filePath)
+                                .sorted(Comparator.reverseOrder())
+                                .forEach(path -> {
+                                    try {
+                                        Files.delete(path);
+                                    } catch (IOException e) {
+                                        failedDeletes.add(fileName);
+                                    }
+                                });
+                        } else {
+                            Files.delete(filePath);
+                        }
+                    } catch (IOException e) {
+                        failedDeletes.add(fileName);
+                    }
+                }
+
+                if (!failedDeletes.isEmpty()) {
+                    showError("Delete Operation", 
+                        new Exception("Failed to delete: " + String.join(", ", failedDeletes)));
+                } else {
+                    showInfo("Files deleted successfully");
+                }
+                
+                updateFileList();
+                selectAllCheckbox.setSelected(false);
+                fileActionsBox.setVisible(false);
+            }
+        });
+    }
+
+    @FXML
+    private void handleArchiveFiles() {
+        List<String> selectedFiles = getSelectedFiles();
+        if (selectedFiles.isEmpty()) return;
+
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Create Archive");
+        dialog.setHeaderText("Enter archive name");
+        dialog.setContentText("Archive name (without extension):");
+
+        dialog.showAndWait().ifPresent(archiveName -> {
+            if (!archiveName.trim().isEmpty()) {
+                try {
+                    // Create archive with selected files
+                    ServerFileManager.createArchive(selectedServer, archiveName, 
+                        selectedFiles.stream()
+                            .map(file -> currentPath + file)
+                            .collect(Collectors.toList())
+                    );
+                    
+                    showInfo("Archive created successfully");
+                    updateFileList();
+                    selectAllCheckbox.setSelected(false);
+                    fileActionsBox.setVisible(false);
+                    
+                } catch (IOException e) {
+                    showError("Archive Creation Failed", e);
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void handleMoveFiles() {
+        List<String> selectedFiles = getSelectedFiles();
+        if (selectedFiles.isEmpty()) return;
+
+        // Create a dialog to select the destination directory
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Move Files");
+        dialog.setHeaderText("Select destination directory");
+
+        // Create a TreeView of server directories
+        TreeView<String> dirTree = new TreeView<>();
+        dirTree.setRoot(createDirectoryTree());
+        dirTree.setPrefHeight(400);
+
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.setContent(dirTree);
+        dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                TreeItem<String> selectedItem = dirTree.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    return getFullPath(selectedItem);
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(targetPath -> {
+            List<String> failedMoves = new ArrayList<>();
+            
+            for (String fileName : selectedFiles) {
+                try {
+                    Path sourcePath = Path.of(selectedServer.getServerPath(), currentPath, fileName);
+                    Path targetDir = Path.of(selectedServer.getServerPath(), targetPath);
+                    Path targetFilePath = targetDir.resolve(fileName);
+
+                    // Create target directory if it doesn't exist
+                    Files.createDirectories(targetDir);
+
+                    // Move the file
+                    Files.move(sourcePath, targetFilePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    failedMoves.add(fileName);
+                }
+            }
+
+            if (!failedMoves.isEmpty()) {
+                showError("Move Operation", 
+                    new Exception("Failed to move: " + String.join(", ", failedMoves)));
+            } else {
+                showInfo("Files moved successfully");
+            }
+            
+            updateFileList();
+            selectAllCheckbox.setSelected(false);
+            fileActionsBox.setVisible(false);
+        });
+    }
+
+    private TreeItem<String> createDirectoryTree() {
+        TreeItem<String> root = new TreeItem<>("/");
+        populateDirectoryTree(root, Path.of(selectedServer.getServerPath()), "");
+        return root;
+    }
+
+    private void populateDirectoryTree(TreeItem<String> item, Path path, String relativePath) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
+            for (Path entry : stream) {
+                if (Files.isDirectory(entry)) {
+                    String dirName = entry.getFileName().toString();
+                    TreeItem<String> dirItem = new TreeItem<>(dirName);
+                    item.getChildren().add(dirItem);
+                    
+                    // Recursively populate subdirectories
+                    populateDirectoryTree(dirItem, entry, 
+                        relativePath.isEmpty() ? dirName : relativePath + "/" + dirName);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getFullPath(TreeItem<String> item) {
+        StringBuilder path = new StringBuilder();
+        TreeItem<String> current = item;
+        
+        while (current != null && !current.getValue().equals("/")) {
+            path.insert(0, current.getValue()).insert(0, "/");
+            current = current.getParent();
+        }
+        
+        return path.toString();
+    }
+
+    private List<String> getSelectedFiles() {
+        return fileListView.getItems().stream()
+            .filter(item -> {
+                Boolean selected = (Boolean) fileListView.getProperties().get("selected_" + item);
+                return selected != null && selected;
+            })
+            .collect(Collectors.toList());
     }
 }
