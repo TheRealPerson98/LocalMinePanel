@@ -160,6 +160,40 @@ Currently, many features shown in the documentation are planned but not yet impl
    - Plugin management
    - Performance optimization
 
+## 📝 TODO List
+
+### High Priority
+- 🔧 Fix memory and CPU usage monitoring
+- 📂 Implement live file system updates
+- 🎨 Add syntax highlighting and colors to console output
+- 🚪 Fix port configuration not updating properly
+- ⚙️ Allow server.properties to generate naturally instead of pre-creating
+
+### Improvements
+- 📝 Move file editor to separate popup window
+  - Add syntax highlighting based on file type
+  - Support different themes for different file types
+  - Add basic IDE features (line numbers, search/replace)
+- 💻 Console Enhancements
+  - Add command history navigation (up/down arrows)
+  - Add command auto-completion
+  - Add clickable links in console output
+  - Add timestamp toggle
+
+### Future Features
+- 📊 Enhanced Performance Monitoring
+  - Graphical display of resource usage
+  - Historical data tracking
+  - Alert system for resource thresholds
+- 🔄 Automatic Backup System
+  - Scheduled backups
+  - Backup rotation
+  - Cloud backup integration
+- 🌐 Plugin/Mod Management
+  - Direct installation from popular platforms
+  - Update checking
+  - Dependency management
+
 ---
 
 <p align="center">

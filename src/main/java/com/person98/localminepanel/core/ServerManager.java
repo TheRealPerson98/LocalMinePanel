@@ -68,6 +68,25 @@ public class ServerManager {
     }
 
     public void removeServer(Server server) {
+        // Delete server directory
+        try {
+            Path serverPath = Path.of(server.getServerPath());
+            if (Files.exists(serverPath)) {
+                Files.walk(serverPath)
+                    .sorted((p1, p2) -> -p1.compareTo(p2)) // Reverse order to delete contents first
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Remove from list and save
         servers.remove(server);
         saveServers();
     }

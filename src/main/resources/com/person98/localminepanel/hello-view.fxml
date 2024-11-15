@@ -112,10 +112,11 @@
                                 
                                 <!-- Modern Command Input -->
                                 <HBox styleClass="command-input-container" spacing="10">
-                                    <TextField fx:id="commandInput" 
-                                              HBox.hgrow="ALWAYS"
-                                              styleClass="command-input"
-                                              promptText="Type a command...">
+                                    <TextField fx:id="commandInput"
+                                               HBox.hgrow="ALWAYS"
+                                               styleClass="command-input"
+                                               promptText="Type a command..."
+                                               onAction="#handleSendCommand">
                                     </TextField>
                                     <Button onAction="#handleSendCommand" 
                                             styleClass="send-button">

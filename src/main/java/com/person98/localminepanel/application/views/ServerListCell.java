@@ -15,6 +15,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class ServerListCell extends ListCell<Server> {
     private final HBox content;
@@ -60,14 +62,23 @@ public class ServerListCell extends ListCell<Server> {
         } else {
             updateStatus();
             deleteButton.setOnAction(e -> {
-                if (server.isRunning()) {
-                    try {
-                        server.stop();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Confirm Delete");
+                confirm.setHeaderText("Delete " + server.getName());
+                confirm.setContentText("Are you sure you want to delete this server? This will remove all server files and cannot be undone.");
+                
+                confirm.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        if (server.isRunning()) {
+                            try {
+                                server.stop();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        ServerManager.getInstance().removeServer(server);
                     }
-                }
-                ServerManager.getInstance().removeServer(server);
+                });
             });
             setGraphic(content);
             updateTimeline.play();
